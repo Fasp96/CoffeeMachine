@@ -31,7 +31,7 @@ namespace CoffeeMachine.GraphicalInterface
             ICoffee coffee;
 
             string ratioCoffeName = CoffeeBox.Controls.OfType<RadioButton>()
-                .FirstOrDefault(r => r.Checked).Name; //Gets the coffee checked
+                .FirstOrDefault(r => r.Checked).Text; //Gets the coffee checked
 
             coffee = factory.CreateCoffee(ratioCoffeName); //Creates the coffee
 
@@ -40,7 +40,7 @@ namespace CoffeeMachine.GraphicalInterface
             //Add the checked Condiments to the coffee
             foreach (var condiments in checkedCondiments)
             {
-                coffee = factory.AddCondiment(coffee, condiments.Name);
+                coffee = factory.AddCondiment(coffee, condiments.Text);
             }
 
             ShowMessageBoxCreateCoffee(coffee); //Show a Message Box with the created coffee
