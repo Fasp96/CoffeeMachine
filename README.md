@@ -27,4 +27,14 @@ The machine must also allow the addition, one or more times, of:
 * Soy (0.15 euros)
 * Whip (0.10 euros).
 
-The implementation must be performed in C # and can have a console based interface or a graphical interface. If you want to exercise the Observer pattern, it is recommended to choose a graphical interface.
+The implementation must be performed in C# and can have a console based interface or a graphical interface. If you want to exercise the Observer pattern, it is recommended to choose a graphical interface.
+
+##  Solution
+
+### Implementation Console Based Interface
+
+![image](./CoffeeMachine-Console.png)
+
+### Implementation Graphical Based Interface (using WinForm)
+
+![image](./CoffeeMachine-GUI.png)
