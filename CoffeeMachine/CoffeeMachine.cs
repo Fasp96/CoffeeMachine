@@ -28,8 +28,9 @@ namespace CoffeeMachine
                     condimentsSelected = ReadCondimentsOpt(); //Read Coffee Option
                 }
 
-                CreateCoffee(factory, coffee, condimentsSelected); //Creates the coffe with the condiments (if there are any)
+                coffee =CreateCoffee(factory, coffee, condimentsSelected); //Creates the coffe with the condiments (if there are any)
                 ShowCoffeeCreated(coffee); //Shows the created Coffe
+
 
                 Console.ReadKey();
                 Console.Clear();
@@ -116,9 +117,10 @@ namespace CoffeeMachine
             return condimentsOptArray;
         }
 
-        static void CreateCoffee(CoffeFactory factory, ICoffee coffee, string[] condimentsSelected)
+        static ICoffee CreateCoffee(CoffeFactory factory, ICoffee coffee, string[] condimentsSelected)
         {
             foreach (string condiment in condimentsSelected) coffee = factory.AddCondiment(coffee, condiment); //Creates the coffe with the selected condiments
+            return coffee;
         }
 
         static void ShowCoffeeCreated(ICoffee coffee)
