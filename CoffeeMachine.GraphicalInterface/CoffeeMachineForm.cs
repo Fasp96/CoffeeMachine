@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoffeeMachine.Data;
 
 namespace CoffeeMachine.GraphicalInterface
 {
-    public partial class CoffeeMachineForm : System.Windows.Forms.Form
+    public partial class CoffeeMachineForm : Form
     {
         public CoffeeMachineForm()
         {
@@ -36,20 +30,30 @@ namespace CoffeeMachine.GraphicalInterface
             CoffeFactory factory = CoffeFactory.Instance;
             ICoffee coffee;
 
-            var ratioCoffe = CoffeeBox.Controls.OfType<RadioButton>()
-                .FirstOrDefault(r => r.Checked);
+            string ratioCoffeName = CoffeeBox.Controls.OfType<RadioButton>()
+                .FirstOrDefault(r => r.Checked).Name; //Gets the coffee checked
 
-            coffee = factory.CreateCoffee(ratioCoffe.Name);
+            coffee = factory.CreateCoffee(ratioCoffeName); //Creates the coffee
 
-            if (SteamedMilkCheckBox.Checked) coffee = factory.AddCondiment(coffee, SteamedMilkCheckBox.Name);
+            //Checks if any of the condiments were selected
+            if (SteamedMilkCheckBox.Checked) coffee = factory.AddCondiment(coffee, SteamedMilkCheckBox.Name); 
             if (MochaCheckBox.Checked) coffee = factory.AddCondiment(coffee, MochaCheckBox.Name);
             if (SoyCheckBox.Checked) coffee = factory.AddCondiment(coffee, SoyCheckBox.Name);
             if (WhipCheckBox.Checked) coffee = factory.AddCondiment(coffee, WhipCheckBox.Name);
 
+
+            //Show a Message Box with the created coffee
             string createdCoffeeMessage = "Coffee Created: " + coffee.Description +
                 "\nCost: " + Math.Round(coffee.Cost, 2) + " euros";
+            DialogResult createCoffeButtonResult = MessageBox.Show(createdCoffeeMessage, "Coffee Ordered", 
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            DialogResult createCoffeButtonResult = MessageBox.Show(createdCoffeeMessage, "Coffee Ordered", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (createCoffeButtonResult == DialogResult.OK) //Resets the CoffeMachine
+            {
+                CoffeeMachineForm coffeeMachineForm = new CoffeeMachineForm();
+                coffeeMachineForm.Show();
+                Dispose(false);
+            }
         }
     }
 }
