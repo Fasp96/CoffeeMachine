@@ -56,7 +56,8 @@ namespace CoffeeMachine
 
         static void ShowCoffeeSelected(string coffeeSelected)
         {
-            Console.Write("\nThe selected coffe was {0}, would you like some condiments in you coffee?(Press Y for condiments)", coffeeSelected);
+            Console.Write("\nThe selected coffe was {0}, would you like some condiments in you coffee?(Press Y for condiments)",
+                coffeeSelected);
         }
 
         static string ReadCoffeeOpt()
