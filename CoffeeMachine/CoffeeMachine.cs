@@ -9,25 +9,33 @@ namespace CoffeeMachine
         static void Main(string[] args)
         {
             string coffeeSelected;
-            string[] condimentsSelected;
+            string[] condimentsSelected = { };
             CoffeFactory factory = CoffeFactory.Instance;
             ICoffee coffee;
 
-            ShowCoffeeOpt(); //Show Coffee Options
-            coffeeSelected = ReadCoffeeOpt(); //Reads Coffee Option
-            
-            ShowCoffeeSelected(coffeeSelected); //Show selected coffe and if wants condiments
-            coffee = factory.CreateCoffee(coffeeSelected); //Creates the selected coffe
-            
-            if (Console.ReadKey(true).Key == ConsoleKey.Y)
+            for (; ; )
             {
-                ShowCondimentOpt(); //Show Condiment Options if Y is pressed
-                condimentsSelected = ReadCondimentsOpt(); //Read Coffee Option
-                foreach (string condiment in condimentsSelected) coffee = factory.AddCondiment(coffee, condiment); //Creates the coffe with the selected condiments
-            }
+                ShowCoffeeOpt(); //Show Coffee Options
+                coffeeSelected = ReadCoffeeOpt(); //Reads Coffee Option
+                if (string.IsNullOrWhiteSpace(coffeeSelected)) break; //Stop program
 
-            ShowCoffeeCreated(coffee); //Shows the created Coffe
-            Console.Read();
+                ShowCoffeeSelected(coffeeSelected); //Show selected coffe and if wants condiments
+                coffee = factory.CreateCoffee(coffeeSelected); //Creates the selected coffe
+
+                if (Console.ReadKey(true).Key == ConsoleKey.Y) //if Y is pressed
+                {
+                    ShowCondimentOpt(); //Show Condiment Options
+                    condimentsSelected = ReadCondimentsOpt(); //Read Coffee Option
+                }
+
+                CreateCoffee(factory, coffee, condimentsSelected); //Creates the coffe with the condiments (if there are any)
+                ShowCoffeeCreated(coffee); //Shows the created Coffe
+
+                Console.ReadKey();
+                Console.Clear();
+
+            }
+            
         }
 
         static void ShowCoffeeOpt()
@@ -42,7 +50,7 @@ namespace CoffeeMachine
                 "\t(4) Espresso\t 1.99 euros\n" +
                 "\t(5) Green Tea\t 1.00 euros\n" +
                 "\n" +
-                "Please select your desire coffee or tea: "
+                "Please select your desire coffee or tea (press enter to exit): "
                 );
         }
 
@@ -62,6 +70,7 @@ namespace CoffeeMachine
                 case "3": return "Decaf";
                 case "4": return "Espresso";
                 case "5": return "Green Tea";
+                default: return null;
             }
             throw new Exception();
         }
@@ -104,6 +113,11 @@ namespace CoffeeMachine
                 
             }
             return condimentsOptArray;
+        }
+
+        static void CreateCoffee(CoffeFactory factory, ICoffee coffee, string[] condimentsSelected)
+        {
+            foreach (string condiment in condimentsSelected) coffee = factory.AddCondiment(coffee, condiment); //Creates the coffe with the selected condiments
         }
 
         static void ShowCoffeeCreated(ICoffee coffee)
