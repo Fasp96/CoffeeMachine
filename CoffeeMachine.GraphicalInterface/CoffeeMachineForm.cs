@@ -35,25 +35,40 @@ namespace CoffeeMachine.GraphicalInterface
 
             coffee = factory.CreateCoffee(ratioCoffeName); //Creates the coffee
 
-            //Checks if any of the condiments were selected
-            if (SteamedMilkCheckBox.Checked) coffee = factory.AddCondiment(coffee, SteamedMilkCheckBox.Name); 
-            if (MochaCheckBox.Checked) coffee = factory.AddCondiment(coffee, MochaCheckBox.Name);
-            if (SoyCheckBox.Checked) coffee = factory.AddCondiment(coffee, SoyCheckBox.Name);
-            if (WhipCheckBox.Checked) coffee = factory.AddCondiment(coffee, WhipCheckBox.Name);
+            var checkedCondiments = CondimentsBox.Controls.OfType<CheckBox>().Where(c => c.Checked).ToArray();//Checks if any of the condiments were selected
 
+            //Add the checked Condiments to the coffee
+            foreach (var condiments in checkedCondiments)
+            {
+                coffee = factory.AddCondiment(coffee, condiments.Name);
+            }
 
-            //Show a Message Box with the created coffee
+            ShowMessageBoxCreateCoffee(coffee); //Show a Message Box with the created coffee
+
+            ResetCoffeeMachine(); //Resets the Coffee Machine
+        }
+
+        private void ShowMessageBoxCreateCoffee(ICoffee coffee)
+        {
             string createdCoffeeMessage = "Coffee Created: " + coffee.Description +
                 "\nCost: " + Math.Round(coffee.Cost, 2) + " euros";
-            DialogResult createCoffeButtonResult = MessageBox.Show(createdCoffeeMessage, "Coffee Ordered", 
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            
+            MessageBox.Show(createdCoffeeMessage, "Coffee Ordered", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
 
-            if (createCoffeButtonResult == DialogResult.OK) //Resets the CoffeMachine
+
+        private void ResetCoffeeMachine()
+        {
+            CoffeeBox.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Checked = false;
+            
+            var checkedCondiments = CondimentsBox.Controls.OfType<CheckBox>().Where(c => c.Checked).ToArray();
+            
+            foreach (var condiments in checkedCondiments)
             {
-                CoffeeMachineForm coffeeMachineForm = new CoffeeMachineForm();
-                coffeeMachineForm.Show();
-                Dispose(false);
+                condiments.Checked = false;
             }
+
+            CreateCoffeeButton.Enabled = false;
         }
     }
 }
